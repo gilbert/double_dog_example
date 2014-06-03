@@ -61,12 +61,14 @@ def setup_orders(cashier, number_of_orders = 1)
   Inventory.stock_item(dogfood, 100, price(499))
   number_of_orders.times do |i| 
     cmd = PlaceOrder.new(
-      cashier: cashier,
-      customer: Customer.new(name: "Charlie ##{i}"), 
-      item: dogfood,
-      quantity: rand(10)
+       OrderBook.next_order,
+       cashier,
+       Customer.new(name: "Charlie ##{i}"), 
+       dogfood,
+       rand(10)
     )
     cmd.run
+
   end
 end
 
@@ -84,13 +86,6 @@ verify "manager can see all orders" do
   end
   viewed == 10
 end
-
-#a technique I'll use a lot to add matcher-like methods to an object
-#when I'm in RSpec, usually just create a matcher
-#module OrderTest
-  #def 
-#end
-
 
 # As a manager, I want to see all orders created by a given employee.
 verify "manager can see orders created by employee" do
