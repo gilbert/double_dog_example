@@ -12,6 +12,10 @@ class Application
     auth.admin_exists?
   end
 
+  def initial_setup
+    auth.register Account.new(login: 'admin', role: Role.Admin), 'password'
+  end
+
   def auth
     @auth_strategy
   end
