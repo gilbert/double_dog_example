@@ -8,6 +8,10 @@ class Application
   end
 
   private
+  def initial_setup_complete?
+    auth.admin_exists?
+  end
+
   def auth
     @auth_strategy
   end

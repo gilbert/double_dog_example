@@ -4,6 +4,10 @@ class Authenticator
 
   end
 
+  def self.admin_exists?
+    accounts.detect{|k, v| true if v.admin?}
+  end
+
   #my totally secure login method
   def self.sign_in(login, password)
     raise AuthenticationError.new unless registrations[login] == password
@@ -12,6 +16,10 @@ class Authenticator
   private
   def self.registrations
     @registrations ||= Hash.new
+  end
+
+  def self.accounts 
+    @accounts||= Hash.new
   end
 
 end
