@@ -1,8 +1,11 @@
 require 'application'
 require 'account'
 require 'role'
+require 'policies/require_manager'
 require 'authentication_error'
 require 'authenticator'
+require 'category'
+require 'item'
 require 'inventory'
 require 'order_book'
 
