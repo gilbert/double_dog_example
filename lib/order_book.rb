@@ -9,15 +9,25 @@ class OrderBook
   end
 
   def self.receipts_for(user)
-    @user_orders||=Hash.new
-    @user_orders[user.login]
+    user_orders[user.login]
   end
 
-  def self.record(order)
 
+  def self.record(order)
+    orders[order.order_number] = order
+    #LOD violation!!!!
+    user_orders[order.cashier.login] ||= []
+    user_orders[order.cashier.login] << order
+  end
+
+  def self.each(&block)
+    orders.values.each(&block)
   end
 
   private
+  def self.user_orders
+    @user_orders||=Hash.new
+  end
   def self.orders
     @orders ||= Hash.new
   end

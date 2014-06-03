@@ -81,8 +81,8 @@ verify "manager can see all orders" do
   viewed = false
   RequireManager(alice) do
     #puts is proxy for viewing orders
-    OrderBook.orders.each{|o| o.items.each{|i| STDOUT.puts "#{i.name} (#{i.quantity}), #{i.quantity * i.price}"}}
-    viewed = OrderBook.orders.count
+    viewed = 0
+    OrderBook.each{|o| viewed +=1; o.line_items.each{|i| STDOUT.puts "#{i.name} (#{i.quantity}), #{i.quantity * i.price}"}}
   end
   viewed == 10
 end
@@ -90,8 +90,9 @@ end
 # As a manager, I want to see all orders created by a given employee.
 verify "manager can see orders created by employee" do
   alice, bob, dorothy = manager('alice'), employee("bob"), employee("dorothy")
-  bob_orders = setup_orders(bob, 2)
-  dorothy_orders = setup_orders(dorothy, 3)
+  setup_orders(bob, 2)
+  setup_orders(dorothy, 3)
+  dorothy_orders = OrderBook.receipts_for(dorothy)
 
   orders = RequireManager(alice) do
     OrderBook.receipts_for(bob)
@@ -106,7 +107,7 @@ end
 verify "manager can create accounts" do
   alice = manager
   RequireManager(alice) do
-    ernest = Account.new(login: 'ernest', role: Role.employee)
+    ernest = Account.new(login: 'ernest', role: Role.Employee)
     Authenticator.register(ernest, 'camp')
   end
   begin
@@ -120,7 +121,7 @@ end
 
 verify("employee can sign in") do
   bob = Account.new(login: 'bob', role: Role.Employee)
-  Authenticator.register
+  Authenticator.register(bob,'password')
   begin
     Authenticator.sign_in("bob", "password")
     true

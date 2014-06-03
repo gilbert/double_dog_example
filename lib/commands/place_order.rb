@@ -10,8 +10,11 @@ class PlaceOrder
 
   def run
     order = Order.new(@order_number, cashier, customer)
-    order.add_line_item(item, quantity)
     #this is a dependency that should really be injected
+    price = Inventory.price_for(item)
+    order.add_line_item(item, price, quantity)
+    #this is a dependency that should really be injected
+    Inventory.remove_stock(item, quantity)
     OrderBook.record(order)
   end
 end
