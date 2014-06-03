@@ -34,18 +34,22 @@ verify("manager can add items to inventory") do
   catfood = Item.new(123, "Cat Food", Category.Pets)
   RequireManager(alice) do
     #item, units in stock
-    Inventory.stock_item(catfood, 1)
+    Inventory.stock_item(catfood, 1, price(100))
   end
 
-  Inventory.in_stock?(item)
+  Inventory.in_stock?(catfood)
 end
 
 #assumption, missing requirement
 verify "employee cannot add inventory" do
   bob = employee
   catfood = Item.new(123, "Cat Food", Category.Pets)
+  begin
   RequireManager(bob) do
     Inventory.stock_item(catfood, 1, price(100))
+  end
+  rescue => e
+    true
   end
 end
 
@@ -54,7 +58,7 @@ def dogfood
 end
 
 def setup_orders(cashier, number_of_orders = 1)
-  Inventory.stockItem(dogfood, 100, price(499))
+  Inventory.stock_item(dogfood, 100, price(499))
   number_of_orders.times do |i| 
     cmd = PlaceOrder.new(
       cashier: cashier,
@@ -69,7 +73,7 @@ end
 # As a manager, I want to see all orders
 verify "manager can see all orders" do
   alice, bob = manager, employee
-  Inventory.stockItem(dogfood, 100, price(499))
+  Inventory.stock_item(dogfood, 100, price(499))
   setup_orders(bob, 10)
 
   viewed = false
@@ -123,7 +127,7 @@ verify("employee can sign in") do
   bob = Account.new(login: 'bob', role: Role.Employee)
   Authenticator.register
   begin
-    current_user = Authenticator.sign_in("bob", "password")
+    Authenticator.sign_in("bob", "password")
     true
   rescue AuthenticationError => e
     false

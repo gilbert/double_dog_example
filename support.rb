@@ -18,6 +18,10 @@ def reset!
   Inventory.clear!
   OrderBook.clear!
 end
+
+def price(price_in_cents)
+  (price_in_cents/100.to_r)
+end
 def manager(name = 'Alice', password='password')
   acct = Account.new(login: name, role: Role.Manager)
   Authenticator.register(acct, password)

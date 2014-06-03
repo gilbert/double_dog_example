@@ -8,7 +8,7 @@ class RequireManager
   end
 
   def run(&block)
-    raise "Not Allowed for #{user.login}" unless allowed?
+    raise "Not Allowed for #{@user.login}" unless allowed?
     yield 
   end
 end
