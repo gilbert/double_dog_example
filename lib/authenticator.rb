@@ -25,7 +25,7 @@ class Authenticator
     @registrations ||= Hash.new
   end
 
-  def self.accounts 
+  def self.accounts
     @accounts||= Hash.new
   end
 

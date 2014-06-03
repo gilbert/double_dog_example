@@ -2,7 +2,7 @@ $: << "./lib"
 require 'ddog'
 require_relative './support'
 # As a manager, I want the first account created to be my admin account
-# Note: within the system, manager is a defined role. 
+# Note: within the system, manager is a defined role.
 #    you can't be a manager without having an account.
 #    This is also an application-level concern, not a domain level
 #
@@ -59,11 +59,11 @@ end
 
 def setup_orders(cashier, number_of_orders = 1)
   Inventory.stock_item(dogfood, 100, price(499))
-  number_of_orders.times do |i| 
+  number_of_orders.times do |i|
     cmd = PlaceOrder.new(
        OrderBook.next_order,
        cashier,
-       Customer.new(name: "Charlie ##{i}"), 
+       Customer.new(name: "Charlie ##{i}"),
        dogfood,
        rand(10)
     )

@@ -1,4 +1,4 @@
-class Role 
+class Role
   attr_accessor :label, :id
   def initialize(opts)
     @label = opts[:label]

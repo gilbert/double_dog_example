@@ -1,6 +1,6 @@
 
 
-class Account 
+class Account
   attr_accessor :login, :password, :role
 
   def initialize(opts)
