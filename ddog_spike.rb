@@ -1,4 +1,5 @@
-require_relative 'ddog'
+$: << "./lib"
+require 'ddog'
 def reset!
   Authenticator.clear!
   Inventory.clear!
