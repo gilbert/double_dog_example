@@ -6,4 +6,8 @@ class Role < Struct.new(:label, :id)
   def self.Employee()
     @emp ||= Role.new(label: "Employee", id: 'employee')
   end
+
+  def self.Admin()
+    @admin ||= Role.new(label: "Admin", id: 'admin')
+  end
 end
