@@ -11,8 +11,12 @@ end
 #    This is also an application-level concern, not a domain level
 #
 verify('First account created is admin') do
-  Application.init()
-  Authenticator.sign_in("admin", "password").is_a?(Role.Admin)
+  Application.new(Authenticator).init()
+  begin
+    Authenticator.sign_in("admin", "password").is_a?(Role.Admin)
+  rescue  => e
+    false
+  end
 end
 
 
