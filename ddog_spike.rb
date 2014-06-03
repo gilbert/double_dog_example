@@ -1,21 +1,18 @@
 $: << "./lib"
 require 'ddog'
-def reset!
-  Authenticator.clear!
-  Inventory.clear!
-  OrderBook.clear!
-end
+require_relative './support'
 # As a manager, I want the first account created to be my admin account
 # Note: within the system, manager is a defined role. 
 #    you can't be a manager without having an account.
 #    This is also an application-level concern, not a domain level
 #
 verify('First account created is admin') do
-  Application.new(Authenticator).init()
   begin
-    Authenticator.sign_in("admin", "password").is_a?(Role.Admin)
+    Application.new(Authenticator).init()
+    user = Authenticator.sign_in("admin", "password")
+    user.admin?
   rescue  => e
-    false
+    e.message
   end
 end
 
@@ -23,24 +20,12 @@ end
 # As a manager, I want to sign in
 verify("manager can sign in") do
   bob = Account.new(login: 'bob', role: Role.Manager)
+  Authenticator.register bob, 'password'
   begin
     current_user = Authenticator.sign_in("bob", "password")
   rescue AuthenticationError => e
-    STDOUT.puts "bob's password is not password"
   end
   bob.manager?
-end
-
-def manager(name = 'Alice', password='password')
-  acct = Account.new(login: name, role: Role.Manager)
-  Authenticator.register(acct, password)
-  acct
-end
-
-def employee(name='Bob', password='password')
-  acct= Account.new(login: name, role: Role.Employee)
-  Authenticator.register(acct, password)
-  acct
 end
 
 # As a manager, I want to create items for order
@@ -141,7 +126,6 @@ verify("employee can sign in") do
     current_user = Authenticator.sign_in("bob", "password")
     true
   rescue AuthenticationError => e
-    STDOUT.puts "bob's password is not password"
     false
   end
 end
